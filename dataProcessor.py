@@ -11,6 +11,8 @@ class DataProcessor:
             return list(filter(lambda x: not pd.isna(x), values))
         return []
     
+
+    
     def calculate_statistics(self, gdp_values: List[float], operation: str) -> float:
         """Calculate statistics using functional programming"""
         if not gdp_values:
