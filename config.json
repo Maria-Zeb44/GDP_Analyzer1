@@ -7,6 +7,7 @@
   "charts": {
     "region_chart": "bar",
     "year_chart": "line"
+
     
   }
 }
