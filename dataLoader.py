@@ -19,10 +19,11 @@ class DataLoader:
         is_year_column = lambda col: str(col).strip().isdigit() and len(str(col).strip()) == 4
         year_columns = list(filter(is_year_column, df.columns))
         
-        # Cleanning cols
-        clean_func = lambda x: pd.to_numeric(x.astype(str).str.replace(',', ''), errors='coerce')
-        df[year_columns] = df[year_columns].applymap(clean_func)
-        
+        # Cleaning cols — operate on each column (Series), not on scalars
+        clean_func = lambda col: pd.to_numeric(col.astype(str).str.replace(',', ''), errors='coerce')
+        if year_columns:
+            df[year_columns] = df[year_columns].apply(clean_func)
+
         return df
     
     def filter_by_config(self, df: pd.DataFrame, config: Dict[str, Any]) -> pd.DataFrame:
