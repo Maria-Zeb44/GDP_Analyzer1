@@ -1,13 +1,13 @@
 {
-  "region": "South Asia",
-  "year": 2020,
+  "region": "North America",
+  "year": 2024,
   "country": "Pakistan",
   "operation": "average",
 
 
   "charts": {
     "region_chart": "bar",
-    "year_chart": "line"
+    "year_chart": "pie"
 
     
   }
