@@ -1,10 +1,3 @@
-"""
-Dashboard entrypoint — reads `config.json`, runs the pipeline, and displays charts.
-
-Usage (project root):
-    python dashboard.py
-"""
-
 from typing import Dict, Any, List
 import os
 import sys
@@ -45,6 +38,7 @@ def plot_country_timeseries(
     show: bool = True,
     out_path: str | None = None,
 ) -> None:
+
     years = _year_columns(df)
     row = df[df["Country Name"] == country]
 
@@ -77,7 +71,7 @@ def plot_region_time_series(
     out_path: str | None = None,
 ) -> None:
     years = _year_columns(df)
-    grouped = df[df["Continent"].str.lower() == region.lower()][years].sum()
+    grouped = df[df["Continent"] == region][years].sum()
 
     if grouped.empty:
         raise ValueError(f"Region '{region}' not found or has no data")
@@ -137,7 +131,7 @@ def run_from_config(
         f"country={cfg.get('country')}, "
         f"year={year}, operation={cfg.get('operation')}"
     )
-    print(f"Result ({stats['operation']}): {stats['result']}")
+    print(f"Result ({stats['operation']}): ${stats['result']:,.2f}")
 
     charts = cfg.get("charts", {})
     saved_files: list[str] = []
