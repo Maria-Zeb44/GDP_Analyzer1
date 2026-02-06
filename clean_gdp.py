@@ -1,8 +1,6 @@
-<<<<<<< HEAD
-﻿import pandas as pd
-=======
+﻿
 import pandas as pd
->>>>>>> 7acb9dfd9a86eb83a7f1093a0ab7a95e2903f7cf
+import pandas as pd
 
 print("=== GDP CSV Cleaner ===")
 
@@ -11,7 +9,6 @@ print("1. Loading CSV...")
 df = pd.read_csv('gdp_with_continent_filled.csv')
 print(f"   Original: {df.shape[0]} rows, {df.shape[1]} columns")
 
-<<<<<<< HEAD
 # 2. Clean year columns
 print("\n2. Cleaning year columns...")
 year_columns = [col for col in df.columns if str(col).strip().isdigit() and len(str(col).strip()) == 4]
@@ -80,7 +77,7 @@ while True:
         print("Please enter 1 or 2")
 
 print("\n YOUR CSV IS CLEAN AND READY FOR ANALYSIS!")
-=======
+
 # 2. Show current numeric columns with comma issues
 print("\n2. Checking numeric columns with comma issues...")
 
@@ -105,9 +102,9 @@ for col in year_columns:
     # Count how many were cleaned
     cleaned_count = df[col].astype(str).str.contains(',').sum()
     if cleaned_count == 0:
-        print(f"   ✅ {col}: Clean")
+        print(f"   {col}: Clean")
     else:
-        print(f"   ✅ {col}: Fixed {cleaned_count} values")
+        print(f"   {col}: Fixed {cleaned_count} values")
 
 # 4. Save cleaned file
 output_file = 'gdp_cleaned_fixed.csv'
@@ -123,6 +120,5 @@ else:
     print("   No data to display")
 
 print("\n" + "="*50)
-print("✅ CLEANING COMPLETE!")
+print("CLEANING COMPLETE!")
 print("="*50)
->>>>>>> 7acb9dfd9a86eb83a7f1093a0ab7a95e2903f7cf
