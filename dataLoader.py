@@ -3,50 +3,51 @@ from typing import Dict, Any
 
 class DataLoader:
     def load_csv(self, filepath: str) -> pd.DataFrame:
-        """Load CSV using pandas"""
+        """Load CSV file"""
         try:
             return pd.read_csv(filepath)
-        except FileNotFoundError:
-            print(f"Error: File '{filepath}' not found")
-            return pd.DataFrame()
-        except Exception as e:
-            print(f"Error loading CSV: {e}")
+        except Exception:
             return pd.DataFrame()
     
     def clean_numeric_columns(self, df: pd.DataFrame) -> pd.DataFrame:
         """Clean numeric columns using functional programming"""
-        # finding cols
-        is_year_column = lambda col: str(col).strip().isdigit() and len(str(col).strip()) == 4
-        year_columns = list(filter(is_year_column, df.columns))
+        if df.empty:
+            return df
         
-        # Cleaning cols — operate on each column (Series), not on scalars
-        clean_func = lambda col: pd.to_numeric(col.astype(str).str.replace(',', ''), errors='coerce')
-        if year_columns:
-            df[year_columns] = df[year_columns].apply(clean_func)
-
+        # Find year columns using filter and lambda
+        is_year = lambda col: str(col).strip().isdigit() and len(str(col).strip()) == 4
+        year_columns = list(filter(is_year, df.columns))
+        
+        # Clean each year column using map
+        clean_column = lambda col: pd.to_numeric(
+            df[col].astype(str).str.replace(',', ''), 
+            errors='coerce'
+        )
+        
+        cleaned_data = list(map(clean_column, year_columns))
+        
+        # Update dataframe
+        for i, col in enumerate(year_columns):
+            df[col] = cleaned_data[i]
+        
         return df
     
     def filter_by_config(self, df: pd.DataFrame, config: Dict[str, Any]) -> pd.DataFrame:
-        """Filter data based on configuration"""
+        """Filter data based on configuration with case-insensitive matching"""
         filtered_df = df.copy()
         
-        # Filtering by regions
-        if config.get('region'):
-            filtered_df = filtered_df[filtered_df['Continent'] == config['region']]
+        region = config.get('region', '').strip()
+        country = config.get('country', '').strip()
         
-        # Filtering by countries
-        if config.get('country'):
-            filtered_df = filtered_df[filtered_df['Country Name'] == config['country']]
+        # Case-insensitive filtering using lambda
+        if region:
+            region_lower = region.lower()
+            region_filter = lambda row: str(row['Continent']).strip().lower() == region_lower
+            filtered_df = filtered_df[filtered_df.apply(region_filter, axis=1)]
+        
+        if country:
+            country_lower = country.lower()
+            country_filter = lambda row: str(row['Country Name']).strip().lower() == country_lower
+            filtered_df = filtered_df[filtered_df.apply(country_filter, axis=1)]
         
         return filtered_df
-
-if __name__ == "__main__":
-    # Testing code
-    loader = DataLoader()
-    df = loader.load_csv("gdp_cleaned_fixed.csv")
-    
-    if not df.empty:
-        print(f"Loaded {df.shape[0]} rows, {df.shape[1]} columns")
-        print(f"Columns: {list(df.columns)[:5]}...")  # Shows 1st 5 cols
-    else:
-        print("Failed to load data")

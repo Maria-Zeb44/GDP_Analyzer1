@@ -1,14 +1,16 @@
 {
+<<<<<<< Updated upstream
   "region": "Africa",
   "year": 1999,
+=======
+  "region": "Asia",
+>>>>>>> Stashed changes
   "country": "Pakistan",
+  "year": 2020,
   "operation": "average",
-
-
+  "data_file": "gdp_cleaned_fixed.csv",
   "charts": {
     "region_chart": "bar",
-    "year_chart": "pie"
-
-    
+    "year_chart": "line"
   }
 }
