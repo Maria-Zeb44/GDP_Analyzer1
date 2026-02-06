@@ -22,12 +22,12 @@ def regional_gdp_bar(df: pd.DataFrame, region: str, year: int) -> None:
     region_df = df[df["Continent"].astype(str).str.strip().str.lower() == region.lower().strip()]
 
     if region_df.empty:
-        print(f"❌ No data for region '{region}'")
+        print(f" No data for region '{region}'")
         return
 
     values = region_df[year]
     if values.isna().all():
-        print(f"❌ All GDP values are NaN for region '{region}' year {year}")
+        print(f" All GDP values are NaN for region '{region}' year {year}")
         return
 
     plt.figure(figsize=(12, 6))
