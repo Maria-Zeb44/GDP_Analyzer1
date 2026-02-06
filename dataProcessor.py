@@ -6,8 +6,9 @@ class DataProcessor:
         """Extract GDP values for specific year using functional approach"""
         year_str = str(year)
         if year_str in df.columns:
-            
+            # Get values, remove NaN
             values = df[year_str].dropna().tolist()
+            # Filter out any remaining NaN using functional programming
             return list(filter(lambda x: not pd.isna(x), values))
         return []
     
@@ -30,15 +31,27 @@ class DataProcessor:
         # Filtering by region
         if config.get("region"):
             df = df[df["Continent"] == config["region"]]
+            print(f"DEBUG: After region filter '{config['region']}': {len(df)} rows")
         
-        # Filtering by countries
+        # Filtering by country
         if config.get("country"):
             df = df[df["Country Name"] == config["country"]]
+            print(f"DEBUG: After country filter '{config['country']}': {len(df)} rows")
         
-        # Extracting data for specific year
-        gdp_values = self.extract_year_data(df, config["year"])
+        # Check if we have data
+        if df.empty:
+            print(f"DEBUG: No data after filtering")
+            gdp_values = []
+        else:
+            # Extracting data for specific year
+            year = config["year"]
+            print(f"DEBUG: Extracting data for year {year}")
+            gdp_values = self.extract_year_data(df, year)
+            print(f"DEBUG: Found {len(gdp_values)} GDP values for {year}")
+            if gdp_values:
+                print(f"DEBUG: Sample values: {gdp_values[:3]}")
         
-        # finding results
+        # Calculate results
         result = self.calculate_statistics(gdp_values, config.get("operation", "average"))
         
         return {
